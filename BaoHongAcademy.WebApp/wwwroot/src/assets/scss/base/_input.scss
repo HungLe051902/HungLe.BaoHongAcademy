@@ -1,0 +1,22 @@
+input[type="text"],
+input[type="email"] {
+  height: 36px;
+  border-radius: 4px;
+  outline: none;
+  border: 1px solid $color-primary;
+  &:focus,
+  &:hover {
+    border-color: $color-primary-hover;
+  }
+}
+
+input.form-control {
+  height: 36px;
+  border-radius: 4px;
+  outline: none;
+  border: 1px solid $color-primary !important;
+  &:focus,
+  &:hover {
+    border-color: $color-primary-hover !important;
+  }
+}
