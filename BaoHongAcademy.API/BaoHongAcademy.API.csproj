@@ -14,10 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ViewModels\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\BaoHongAcademy.Domain\BaoHongAcademy.Domain.csproj" />
     <ProjectReference Include="..\BaoHongAcademy.Infrastructure\BaoHongAcademy.Infrastructure.csproj" />
   </ItemGroup>
