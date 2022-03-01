@@ -19,6 +19,7 @@
       <div class="form-group">
         <label for="exampleInputPassword1">Password</label>
         <input
+          @keyup.enter="registerUser"
           type="password"
           class="form-control"
           id="exampleInputPassword1"

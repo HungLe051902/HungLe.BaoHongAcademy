@@ -7,6 +7,7 @@
       <div class="form-group">
         <label for="exampleInputEmail1">Email address</label>
         <input
+          @keyup.enter="login"
           ref="emailInput"
           class="form-control"
           id="exampleInputEmail1"
@@ -19,6 +20,7 @@
       <div class="form-group">
         <label for="exampleInputPassword1">Password</label>
         <input
+          @keyup.enter="login"
           type="password"
           class="form-control"
           id="exampleInputPassword1"
