@@ -27,6 +27,18 @@ import "@/assets/scss/main.scss";
 /* Vue-toastification */
 import Notifications from "@kyvg/vue3-notification";
 
+/* Font Awesome */
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { fas } from "@fortawesome/free-solid-svg-icons";
+library.add(fas);
+// import { fab } from "@fortawesome/free-brands-svg-icons";
+// library.add(fab);
+// import { far } from "@fortawesome/free-regular-svg-icons";
+// library.add(far);
+import { dom } from "@fortawesome/fontawesome-svg-core";
+dom.watch();
+
 const app = createApp({
   extends: App,
 });
@@ -34,5 +46,6 @@ const app = createApp({
 app.use(router);
 app.use(IonicVue);
 app.use(Notifications);
+app.component("font-awesome-icon", FontAwesomeIcon);
 
 app.mount("#app");

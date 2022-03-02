@@ -38,7 +38,9 @@
         />
         <label class="form-check-label" for="flexCheckDefault"> Duy trì đăng nhập </label>
       </div>
-      <button v-on:click="login" class="mt-2 h-btn h-btn-primary w-100">Đăng nhập</button>
+      <button v-on:click="login" class="mt-2 h-btn h-btn-primary w-100 button-load">
+        <i v-if="isLoadingBtn" class="fa fa-spinner fa-spin mr-2"></i>Đăng nhập
+      </button>
       <div class="mt-3 center-content flex-column">
         <p class="mb-3">
           Bạn chưa có tài khoản?
@@ -93,17 +95,20 @@ export default {
   data() {
     return {
       loginKeeping: false,
+      isLoadingBtn: false,
     };
   },
   created() {},
   methods: {
     login() {
+      const that = this;
       try {
         this.onSubmit();
         if (this.metaValidation.valid == false) {
           return;
         }
 
+        this.isLoadingBtn = true;
         HTTP.post("/Accounts/authenticate", {
           UserName: this.email,
           Password: this.password,
@@ -123,9 +128,11 @@ export default {
           })
           .catch((err) => {
             console.log(err);
+            that.isLoadingBtn = false;
           });
       } catch (error) {
         console.log();
+        that.isLoadingBtn = false;
       }
     },
   },

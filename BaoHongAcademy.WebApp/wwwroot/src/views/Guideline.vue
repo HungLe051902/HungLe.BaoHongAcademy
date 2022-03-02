@@ -48,6 +48,19 @@
     <p>
       ------------------------------------------------------------------------------------
     </p>
+
+    <h3>Font Awesome</h3>
+    <div>
+      <span class="mr-2"><em>HTML</em></span>
+      <i class="fa fa-spinner fa-spin"></i>
+    </div>
+    <div>
+      <span class="mr-2"><em>VueJS</em></span>
+      <font-awesome-icon icon="coffee" />
+    </div>
+    <p>
+      ------------------------------------------------------------------------------------
+    </p>
   </div>
 </template>
 <script>
