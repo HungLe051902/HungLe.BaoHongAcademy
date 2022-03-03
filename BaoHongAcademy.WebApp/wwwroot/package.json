@@ -25,6 +25,7 @@
     "vee-validate": "^4.5.7",
     "vue": "^3.0.0",
     "vue-router": "^4.0.10",
+    "vue3-google-oauth2": "^1.0.6",
     "yup": "^0.32.11"
   },
   "devDependencies": {

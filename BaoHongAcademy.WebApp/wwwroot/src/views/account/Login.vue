@@ -41,6 +41,9 @@
       <button v-on:click="login" class="mt-2 h-btn h-btn-primary w-100 button-load">
         <i v-if="isLoadingBtn" class="fa fa-spinner fa-spin mr-2"></i>Đăng nhập
       </button>
+      <button v-on:click="loginByGoogle" class="h-btn h-btn-primary">
+        Đăng nhập bằng Google
+      </button>
       <div class="mt-3 center-content flex-column">
         <p class="mb-3">
           Bạn chưa có tài khoản?
@@ -100,6 +103,23 @@ export default {
   },
   created() {},
   methods: {
+    async loginByGoogle() {
+      console.log("sfdsfsd");
+      console.log("sfdsfsd", this.$gAuth);
+      const googleUser = await this.$gAuth.signIn();
+      console.log({ googleUser });
+
+      console.log("googleUser", googleUser);
+      this.user = googleUser.getBasicProfile().getEmail();
+      console.log("getId", this.user);
+      console.log("getBasicProfile", googleUser.getBasicProfile());
+      console.log("getAuthResponse", googleUser.getAuthResponse());
+      console.log("getAuthResponse", googleUser.getAuthResponse().id_token);
+      console.log(
+        "getAuthResponse",
+        this.$gAuth.instance.currentUser.get().getAuthResponse()
+      );
+    },
     login() {
       const that = this;
       try {

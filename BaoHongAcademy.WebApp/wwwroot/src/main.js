@@ -32,12 +32,18 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { fas } from "@fortawesome/free-solid-svg-icons";
 library.add(fas);
-// import { fab } from "@fortawesome/free-brands-svg-icons";
-// library.add(fab);
-// import { far } from "@fortawesome/free-regular-svg-icons";
-// library.add(far);
 import { dom } from "@fortawesome/fontawesome-svg-core";
 dom.watch();
+
+/* Vue3 google auth */
+import GAuth from "vue3-google-oauth2";
+const gAuthOptions = {
+  clientId:
+    "1043717095471-e67ctvukq61nkfq69k3gvntb3hlftkb8.apps.googleusercontent.com",
+  scope: "email",
+  prompt: "consent",
+  fetch_basic_profile: false,
+};
 
 const app = createApp({
   extends: App,
@@ -47,5 +53,6 @@ app.use(router);
 app.use(IonicVue);
 app.use(Notifications);
 app.component("font-awesome-icon", FontAwesomeIcon);
+app.use(GAuth, gAuthOptions);
 
 app.mount("#app");
