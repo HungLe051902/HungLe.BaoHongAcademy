@@ -28,6 +28,14 @@ namespace BaoHongAcademy.API.Interfaces
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="userName"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        public Task<ActionServiceResult> RegisterExternalUser(string gmail);
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         public User GetById(Guid id);

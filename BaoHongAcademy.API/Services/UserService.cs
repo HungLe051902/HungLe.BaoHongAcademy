@@ -11,6 +11,7 @@ using BaoHongAcademy.Infrastructure;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using static BaoHongAcademy.Domain.Constants.CommonConstant;
 
 namespace BaoHongAcademy.API.Services
 {
@@ -42,13 +43,14 @@ namespace BaoHongAcademy.API.Services
         {
             var users = _dbContext.Users;
 
-            var existedUser = users.FirstOrDefault(u => u.Email == email.Trim());
+            var existedUser = users.FirstOrDefault(u => u.Email == email);
 
             if (existedUser == null)
             {
                 users.Add(new User()
                 {
                     Email = email,
+                    UserLoginType = UserLoginType.Manual,
                     Password = HelperMethods.ComputeHash(password, HashAlgorithmCode.SHA512, null)
                 });
                 _dbContext.SaveChanges();
@@ -62,6 +64,34 @@ namespace BaoHongAcademy.API.Services
         public User GetById(Guid id)
         {
             return _dbContext.Users.FirstOrDefault(u => u.UserId == id);
+        }
+
+        public Task<ActionServiceResult> RegisterExternalUser(string gmail)
+        {
+            var users = _dbContext.Users;
+
+            var existedUser = users.FirstOrDefault(u => u.Email == gmail);
+
+            var userAuthen = (dynamic)null;
+            if (existedUser == null)
+            {
+                var newUser = new User()
+                {
+                    Email = gmail,
+                    UserLoginType = UserLoginType.External,
+                };
+                users.Add(newUser);
+                _dbContext.SaveChanges();
+
+                userAuthen = users.FirstOrDefault(u => u.Email == gmail);
+            }
+            else
+            {
+                userAuthen = existedUser;
+            }
+
+            var token = HelperMethods.GenerateJwtToken(userAuthen, _appSettings.SecretKey);
+            return Task.FromResult(new ActionServiceResult(true, StatusCodes.Status200OK, "Đăng nhập từ google thành công", token));
         }
     }
 }

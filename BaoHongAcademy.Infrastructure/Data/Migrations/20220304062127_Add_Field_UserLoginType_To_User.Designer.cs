@@ -4,14 +4,16 @@ using BaoHongAcademy.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BaoHongAcademy.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(BaoHongContext))]
-    partial class BaoHongContextModelSnapshot : ModelSnapshot
+    [Migration("20220304062127_Add_Field_UserLoginType_To_User")]
+    partial class Add_Field_UserLoginType_To_User
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

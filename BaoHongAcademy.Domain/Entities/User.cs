@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -12,6 +13,8 @@ namespace BaoHongAcademy.Domain.Entities
     {
         public Guid UserId { get; set; } = Guid.NewGuid();
         public string UserName { get; set; }
+        [StringLength(50)]
+        public string UserLoginType { get; set; }
         [JsonIgnore]
         public string Password { get; set; }
         public string Fullname { get; set; }

@@ -39,13 +39,21 @@
         <label class="form-check-label" for="flexCheckDefault"> Duy trì đăng nhập </label>
       </div>
       <button v-on:click="login" class="mt-2 h-btn h-btn-primary w-100 button-load">
-        <i v-if="isLoadingBtn" class="fa fa-spinner fa-spin mr-2"></i>Đăng nhập
+        <span v-if="isLoadingBtn == 1"><i class="fa fa-spinner fa-spin mr-2"></i></span>
+        Đăng nhập
       </button>
-      <button v-on:click="loginByGoogle" class="h-btn h-btn-primary">
-        Đăng nhập bằng Google
-      </button>
+      <div class="d-flex">
+        <button v-on:click="loginByGoogle" class="h-btn h-btn-primary mt-3 w-50">
+          <i class="fa-brands fa-google mr-1"></i>
+          Tiếp tục với Google
+        </button>
+        <button v-on:click="loginByFacebook" class="ml-2 h-btn h-btn-primary mt-3 w-50">
+          <span class="mr-1"><i class="fa-brands fa-facebook-square"></i></span>
+          Tiếp tục với Facebook
+        </button>
+      </div>
       <div class="mt-3 center-content flex-column">
-        <p class="mb-3">
+        <p class="mb-2">
           Bạn chưa có tài khoản?
           <a v-on:click="goToRegister" href="#">Đăng ký</a>
         </p>
@@ -60,9 +68,9 @@ import { saveToken } from "@/helpers/authenticationHelper";
 import Brand from "@/components/Brand";
 import AccountMixin from "@/mixins/accountMixin.vue";
 import { HTTP } from "@/services/BaseAxios";
+import AccountService from "@/services/accountService.js";
 import { useField, useForm } from "vee-validate";
 import * as yup from "yup";
-
 export default {
   setup() {
     // Define a validation schema
@@ -86,6 +94,7 @@ export default {
     // No need to define rules for fields
     const { value: email, errorMessage: emailError } = useField("email");
     const { value: password, errorMessage: passwordError } = useField("password");
+
     return {
       metaValidation: meta,
       onSubmit,
@@ -98,27 +107,38 @@ export default {
   data() {
     return {
       loginKeeping: false,
-      isLoadingBtn: false,
+      isLoadingBtn: 0,
     };
   },
   created() {},
   methods: {
+    loginByFacebook() {
+      this.$notify({
+        type: "info", // warn, error, success
+        title: "Thông báo",
+        text: "Tính năng đang phát triển",
+      });
+    },
     async loginByGoogle() {
-      console.log("sfdsfsd");
-      console.log("sfdsfsd", this.$gAuth);
+      /**
+       * Token: this.$gAuth.instance.currentUser.get().getAuthResponse()
+       * getAuthResponsethis.googleUser.getAuthResponse()
+       */
       const googleUser = await this.$gAuth.signIn();
-      console.log({ googleUser });
+      var gmail = googleUser.getBasicProfile().getEmail();
 
-      console.log("googleUser", googleUser);
-      this.user = googleUser.getBasicProfile().getEmail();
-      console.log("getId", this.user);
-      console.log("getBasicProfile", googleUser.getBasicProfile());
-      console.log("getAuthResponse", googleUser.getAuthResponse());
-      console.log("getAuthResponse", googleUser.getAuthResponse().id_token);
-      console.log(
-        "getAuthResponse",
-        this.$gAuth.instance.currentUser.get().getAuthResponse()
-      );
+      var res = await AccountService.externalLogin({ Gmail: gmail });
+      if (res?.data?.Success) {
+        this.$notify({
+          type: "success", // warn, error, success
+          title: "Thành công",
+          text: "Đăng nhập thành công",
+        });
+        // Save token to local storage
+        saveToken(res.data.Data);
+
+        this.$router.push({ path: "main", query: { isReload: true } });
+      }
     },
     login() {
       const that = this;
@@ -128,7 +148,7 @@ export default {
           return;
         }
 
-        this.isLoadingBtn = true;
+        this.isLoadingBtn = 1;
         HTTP.post("/Accounts/authenticate", {
           UserName: this.email,
           Password: this.password,
@@ -142,17 +162,23 @@ export default {
               });
               // Save token to local storage
               saveToken(res.data.Data);
-
-              this.$router.push("/main");
+              this.$router.push({ path: "main", query: { isReload: true } });
+            } else {
+              this.$notify({
+                type: "error", // warn, error, success
+                title: "Cảnh báo",
+                text: "Bạn nhập sai tài khoản hoặc mật khẩu",
+              });
+              this.isLoadingBtn = 0;
             }
           })
           .catch((err) => {
             console.log(err);
-            that.isLoadingBtn = false;
+            that.isLoadingBtn = 0;
           });
       } catch (error) {
         console.log();
-        that.isLoadingBtn = false;
+        that.isLoadingBtn = 0;
       }
     },
   },
@@ -167,8 +193,6 @@ export default {
   },
   components: {
     Brand,
-    // Form,
-    // Field,
   },
   mixins: [AccountMixin],
 };

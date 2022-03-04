@@ -44,5 +44,13 @@ namespace BaoHongAcademy.API.Controllers
             var result = await _userService.RegisterUser(userCred.UserName, userCred.Password);
             return result;
         }
+
+        [AllowAnonymous]
+        [HttpPost("external-login")]
+        public async Task<ActionServiceResult> ExternalLogin([NotNull] UserExternal userCred)
+        {
+            var result = await _userService.RegisterExternalUser(userCred.Gmail);
+            return result;
+        }
     }
 }

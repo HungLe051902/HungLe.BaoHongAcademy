@@ -31,6 +31,10 @@ import Notifications from "@kyvg/vue3-notification";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { fas } from "@fortawesome/free-solid-svg-icons";
+import { fab } from "@fortawesome/free-brands-svg-icons";
+library.add(fab);
+import { far } from "@fortawesome/free-regular-svg-icons";
+library.add(far);
 library.add(fas);
 import { dom } from "@fortawesome/fontawesome-svg-core";
 dom.watch();
@@ -45,6 +49,10 @@ const gAuthOptions = {
   fetch_basic_profile: false,
 };
 
+/* Event Bus */
+import mitt from "mitt";
+const emitter = mitt();
+
 const app = createApp({
   extends: App,
 });
@@ -54,5 +62,6 @@ app.use(IonicVue);
 app.use(Notifications);
 app.component("font-awesome-icon", FontAwesomeIcon);
 app.use(GAuth, gAuthOptions);
+app.provide("emitter", emitter);
 
 app.mount("#app");
