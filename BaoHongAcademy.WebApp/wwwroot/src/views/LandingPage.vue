@@ -49,7 +49,7 @@
   </div>
 </template>
 <script>
-import Brand from "@/components/Brand";
+import Brand from "@/components/HBrand";
 import AccountMixin from "@/mixins/accountMixin.vue";
 
 export default {

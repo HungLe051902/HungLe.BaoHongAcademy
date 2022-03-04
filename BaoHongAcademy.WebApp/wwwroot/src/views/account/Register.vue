@@ -57,7 +57,7 @@
   </div>
 </template>
 <script>
-import Brand from "@/components/Brand";
+import Brand from "@/components/HBrand.vue";
 import AccountMixin from "@/mixins/accountMixin.vue";
 import { HTTP } from "@/services/BaseAxios";
 import { useField, useForm } from "vee-validate";

@@ -65,7 +65,7 @@
 </template>
 <script>
 import { saveToken } from "@/helpers/authenticationHelper";
-import Brand from "@/components/Brand";
+import Brand from "@/components/HBrand";
 import AccountMixin from "@/mixins/accountMixin.vue";
 import { HTTP } from "@/services/BaseAxios";
 import AccountService from "@/services/accountService.js";
