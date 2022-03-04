@@ -14,7 +14,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   var token = getToken();
   if (!token) {
-    var listRouteNotAuthorize = ["/", "/login"];
+    var listRouteNotAuthorize = ["/", "/login", "/register"];
     if (listRouteNotAuthorize.includes(to.path)) {
       next();
     } else {
