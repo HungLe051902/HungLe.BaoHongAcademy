@@ -46,7 +46,8 @@ namespace BaoHongAcademy.API
                     });
             });
 
-            services.AddAuthentication().AddGoogle(options => {
+            services.AddAuthentication().AddGoogle(options =>
+            {
                 options.ClientId = Configuration.GetSection("Authentication:Google:ClientId").ToString();
                 options.ClientSecret = Configuration.GetSection("Authentication:Google:ClientSecret").ToString();
             });
