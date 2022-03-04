@@ -1,4 +1,5 @@
 ﻿using BaoHongAcademy.Domain.Entities;
+using BaoHongAcademy.Infrastructure.Persistence.EntityConfigurations;
 using Microsoft.EntityFrameworkCore;
 
 namespace BaoHongAcademy.Infrastructure
@@ -9,16 +10,16 @@ namespace BaoHongAcademy.Infrastructure
         {
         }
 
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    optionsBuilder.UseSqlServer("Data Source=localhost\\MSSQLSERVER01; Initial Catalog=BaoHong; Integrated Security=SSPI");
-        //}
-
-        public DbSet<User> Users { get; set; }
-
+        /// <summary>
+        /// Use Fluent API to config Entity Model
+        /// </summary>
+        /// <param name="modelBuilder"></param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            new UserEntityTypeConfiguration().Configure(modelBuilder.Entity<User>());
             modelBuilder.Entity<User>().ToTable("User");
         }
+
+        public DbSet<User> Users { get; set; }
     }
 }
