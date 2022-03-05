@@ -18,8 +18,11 @@ namespace BaoHongAcademy.Infrastructure
         {
             new UserEntityTypeConfiguration().Configure(modelBuilder.Entity<User>());
             modelBuilder.Entity<User>().ToTable("User");
+            new BlogEntityTypeConfiguration().Configure(modelBuilder.Entity<Blog>());
         }
 
         public DbSet<User> Users { get; set; }
+
+        public DbSet<Blog> Blogs { get; set; }
     }
 }

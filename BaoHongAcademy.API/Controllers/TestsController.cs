@@ -1,9 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using BaoHongAcademy.Domain.Entities;
+using BaoHongAcademy.Infrastructure.DataLayer;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BaoHongAcademy.API.Controllers
 {
@@ -11,5 +8,15 @@ namespace BaoHongAcademy.API.Controllers
     [ApiController]
     public class TestsController : ControllerBase
     {
+        [HttpGet("adonet")]
+        public void TestADONET()
+        {
+            using (var dbCon = new DatabaseConnection())
+            {
+                //dbCon.GetData<>
+                var list = dbCon.GetDataRawSql<Blog>("select * from Blog Where Author = 'Hung';", null);
+                var a = 1;
+            }
+        }
     }
 }

@@ -19,6 +19,13 @@ namespace BaoHongAcademy.Domain.Enums
             Female = 0,
             Male = 1
         }
+
+        public enum BlogType
+        {
+            IT = 1,
+            Travel = 2,
+            Personal = 3
+        }
     }
 
 }
