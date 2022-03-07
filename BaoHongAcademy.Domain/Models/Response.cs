@@ -8,6 +8,10 @@ namespace BaoHongAcademy.Domain.Models
 {
     public class ActionServiceResult
     {
+        public ActionServiceResult()
+        {
+        }
+
         public ActionServiceResult(bool success, int appCode, string message, object data)
         {
             Success = success;

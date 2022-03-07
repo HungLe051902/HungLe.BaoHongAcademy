@@ -103,6 +103,9 @@ namespace BaoHongAcademy.API
 
             app.UseAuthentication();
 
+            // Global error handler
+            app.UseHandleErrorMiddleware();
+
             app.UseMiddleware<JwtMiddleware>();
 
             app.UseAuthorization();

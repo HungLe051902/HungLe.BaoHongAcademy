@@ -27,7 +27,7 @@ namespace BaoHongAcademy.API.Controllers
                 //dbCon.ExcuteCommand("Delete from Blog where BlogId = '728B4370-3A0E-4045-9C55-4BF50BA7F707'", isSqlRaw: true, parameters: null);
                 //dbCon.Commit();
 
-                var a = dbCon.GetData<Blog>("Proc_GetBlog");
+                var a = dbCon.GetData<Blog>("Proc_GetBlog123");
             }
         }
     }
