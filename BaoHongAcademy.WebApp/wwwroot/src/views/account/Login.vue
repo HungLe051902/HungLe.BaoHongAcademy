@@ -29,15 +29,6 @@
         />
         <span class="text-danger">{{ passwordError }}</span>
       </div>
-      <div class="form-check">
-        <input
-          class="form-check-input"
-          type="checkbox"
-          v-model="loginKeeping"
-          id="flexCheckDefault"
-        />
-        <label class="form-check-label" for="flexCheckDefault"> Duy trì đăng nhập </label>
-      </div>
       <button v-on:click="login" class="mt-2 h-btn h-btn-primary w-100 button-load">
         <span v-if="isLoadingBtn == 1"><i class="fa fa-spinner fa-spin mr-2"></i></span>
         Đăng nhập

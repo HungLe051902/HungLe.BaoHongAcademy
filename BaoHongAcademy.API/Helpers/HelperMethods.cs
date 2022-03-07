@@ -27,7 +27,7 @@ namespace BaoHongAcademy.API.Helpers
                     new Claim(ClaimType.USER_ID, user.UserId.ToString()),
                     new Claim(ClaimType.USER_NAME, user.Email)
                 }),
-                Expires = DateTime.UtcNow.AddDays(7),
+                Expires = DateTime.UtcNow.AddHours(4),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);

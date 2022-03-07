@@ -1,6 +1,6 @@
 import { createWebHistory, createRouter } from "vue-router";
 import { routes } from "./routes";
-import { getToken } from "@/helpers/authenticationHelper.js";
+import { TOKEN_KEY } from "@/helpers/authenticationHelper.js";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -12,7 +12,7 @@ const router = createRouter({
  */
 /* eslint-disable no-alert, no-console */
 router.beforeEach((to, from, next) => {
-  var token = getToken();
+  var token = localStorage.getItem(TOKEN_KEY);
   if (!token) {
     var listRouteNotAuthorize = ["/", "/login", "/register"];
     if (listRouteNotAuthorize.includes(to.path)) {
@@ -20,9 +20,13 @@ router.beforeEach((to, from, next) => {
     } else {
       next({ name: "LandingPage" });
     }
+  } else {
+    if (["/login", "/register"].includes(to.path)) {
+      next({ name: "Main" });
+    } else {
+      next();
+    }
   }
-
-  next();
 });
 /* eslint-enable no-alert */
 export default router;
