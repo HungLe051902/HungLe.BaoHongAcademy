@@ -1,4 +1,5 @@
 ﻿using BaoHongAcademy.Domain.Entities;
+using BaoHongAcademy.Infrastructure.Helpers;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,6 @@ namespace BaoHongAcademy.Infrastructure.DataLayer
 {
     public class DatabaseConnection : IDatabaseConnection
     {
-        private const string connectionStr = "Data Source=DESKTOP-R7RA7TV; Initial Catalog=BaoHongAcademyDevelopment; Integrated Security=SSPI; TrustServerCertificate=True";
         private readonly SqlConnection _sqlConnection;
         private readonly SqlCommand _sqlCommand;
         private SqlTransaction sqlTransaction;
@@ -20,7 +20,15 @@ namespace BaoHongAcademy.Infrastructure.DataLayer
 
         public DatabaseConnection()
         {
-            _sqlConnection = new SqlConnection(connectionStr);
+            _sqlConnection = new SqlConnection(DatabaseHelper.GetConnectionString());
+            _sqlConnection.Open();
+            _sqlCommand = new SqlCommand();
+            _sqlCommand.Connection = _sqlConnection;
+        }
+
+        public DatabaseConnection(string connectionString)
+        {
+            _sqlConnection = new SqlConnection(connectionString);
             _sqlConnection.Open();
             _sqlCommand = new SqlCommand();
             _sqlCommand.Connection = _sqlConnection;

@@ -22,10 +22,12 @@ namespace BaoHongAcademy.API.Controllers
                 //};
 
                 //dbCon.InsertIntoDB<Blog>("Proc_InsertBlog", blog);
-                dbCon.BeginTransaction();
-                dbCon.ExcuteCommand("Update Course Set Author = 'Lan' where CourseId = 'A6CC66D1-846C-49DE-5E84-08D9FFE64326'", isSqlRaw: true, parameters: null);
-                dbCon.ExcuteCommand("Delete from Blog where BlogId = '728B4370-3A0E-4045-9C55-4BF50BA7F707'", isSqlRaw: true, parameters: null);
-                dbCon.Commit();
+                //dbCon.BeginTransaction();
+                //dbCon.ExcuteCommand("Update Course Set Author = 'Lan' where CourseId = 'A6CC66D1-846C-49DE-5E84-08D9FFE64326'", isSqlRaw: true, parameters: null);
+                //dbCon.ExcuteCommand("Delete from Blog where BlogId = '728B4370-3A0E-4045-9C55-4BF50BA7F707'", isSqlRaw: true, parameters: null);
+                //dbCon.Commit();
+
+                var a = dbCon.GetData<Blog>("Proc_GetBlog");
             }
         }
     }

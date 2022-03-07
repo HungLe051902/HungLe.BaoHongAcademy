@@ -18,6 +18,7 @@ using BaoHongAcademy.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using BaoHongAcademy.API.Helpers;
 using BaoHongAcademy.API.Middleware;
+using BaoHongAcademy.Infrastructure.Helpers;
 
 namespace BaoHongAcademy.API
 {
@@ -54,6 +55,8 @@ namespace BaoHongAcademy.API
 
             services.AddDbContext<BaoHongContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            DatabaseHelper.connectionString = Configuration.GetConnectionString("DefaultConnection");
 
             services.AddScoped<IUserService, UserService>();
 
