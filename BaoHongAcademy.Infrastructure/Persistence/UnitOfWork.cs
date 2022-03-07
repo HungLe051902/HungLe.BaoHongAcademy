@@ -15,10 +15,13 @@ namespace BaoHongAcademy.Infrastructure.Persistence
         private readonly DbContext _context;
         public IBlogRepository Blogs { get; private set; }
 
+        public ICourseRepository Courses { get; private set; }
+
         public UnitOfWork(BaoHongContext context)
         {
             _context = context;
             Blogs = new BlogRepository(context);
+            Courses = new CourseRepository(context);
         }
 
         public int Complete()

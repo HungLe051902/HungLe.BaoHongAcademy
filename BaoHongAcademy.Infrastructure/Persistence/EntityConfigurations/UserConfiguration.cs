@@ -8,7 +8,7 @@ namespace BaoHongAcademy.Infrastructure.Persistence.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
-
+            builder.ToTable("User");
         }
     }
 }

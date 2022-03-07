@@ -36,6 +36,20 @@ namespace BaoHongAcademy.Infrastructure.Data
                 }
             }
 
+            if (!context.Courses.Any())
+            {
+                var courses = new List<Course>()
+                {
+                    new Course {Author = "Hung", CourseName = "Lập trình C# từ A - Z"},
+                    new Course {Author = "Anh", CourseName = "Làm chủ Javascript"},
+                };
+
+                using (var unitOfWork = new UnitOfWork(context))
+                {
+                    unitOfWork.Courses.AddRange(courses);
+                    unitOfWork.Complete();
+                }
+            }
         }
     }
 }

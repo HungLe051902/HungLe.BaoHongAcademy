@@ -5,23 +5,25 @@ using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace BaoHongAcademy.Infrastructure.DataLayer
 {
     public class DatabaseConnection : IDatabaseConnection
     {
-        private readonly string connectionStr = "Data Source=DESKTOP-R7RA7TV; Initial Catalog=BaoHongAcademyDevelopment; Integrated Security=SSPI; TrustServerCertificate=True";
-        private readonly SqlConnection sqlConnection;
-        private readonly SqlCommand sqlCommand;
+        private const string connectionStr = "Data Source=DESKTOP-R7RA7TV; Initial Catalog=BaoHongAcademyDevelopment; Integrated Security=SSPI; TrustServerCertificate=True";
+        private readonly SqlConnection _sqlConnection;
+        private readonly SqlCommand _sqlCommand;
+        private SqlTransaction sqlTransaction;
 
         public string ConnectionString { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public DatabaseConnection()
         {
-            sqlConnection = new SqlConnection(connectionStr);
-            sqlConnection.Open();
-            sqlCommand = new SqlCommand();
-            sqlCommand.Connection = sqlConnection;
+            _sqlConnection = new SqlConnection(connectionStr);
+            _sqlConnection.Open();
+            _sqlCommand = new SqlCommand();
+            _sqlCommand.Connection = _sqlConnection;
         }
 
         public void SetCommandType(SqlCommand command, CommandType commandType)
@@ -31,55 +33,53 @@ namespace BaoHongAcademy.Infrastructure.DataLayer
 
         public IEnumerable<T> GetData<T>(string procedureName, IDictionary<string, object> parameters = null) where T : class
         {
-            sqlCommand.CommandType = CommandType.StoredProcedure;
-            sqlCommand.CommandText = procedureName;
-
-            foreach (var param in parameters)
+            using (var sqlCommand = new SqlCommand())
             {
-                sqlCommand.Parameters.Add(new SqlParameter($"@{param.Key}", param.Value));
-            }
+                sqlCommand.Connection = _sqlConnection;
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+                sqlCommand.CommandText = procedureName;
 
-            using var sqlDataReader = sqlCommand.ExecuteReader();
+                SetParameters(sqlCommand.Parameters, parameters);
 
-            var result = new List<T>();
-            while (sqlDataReader.Read())
-            {
-                var item = Activator.CreateInstance<T>();
-                foreach (var property in typeof(T).GetProperties())
+                using var sqlDataReader = sqlCommand.ExecuteReader();
+
+                var result = new List<T>();
+                while (sqlDataReader.Read())
                 {
-                    if (!sqlDataReader.IsDBNull(sqlDataReader.GetOrdinal(property.Name)))
+                    var item = Activator.CreateInstance<T>();
+                    foreach (var property in typeof(T).GetProperties())
                     {
-                        var dataDB = sqlDataReader[property.Name];
-                        var value = (dynamic)null;
-                        Type convertTo = Nullable.GetUnderlyingType(property.PropertyType) ?? property.PropertyType;
-                        if (convertTo.IsEnum)
+                        if (!sqlDataReader.IsDBNull(sqlDataReader.GetOrdinal(property.Name)))
                         {
-                            value = Enum.ToObject(convertTo, dataDB);
+                            var dataDB = sqlDataReader[property.Name];
+                            var value = (dynamic)null;
+                            Type convertTo = Nullable.GetUnderlyingType(property.PropertyType) ?? property.PropertyType;
+                            if (convertTo.IsEnum)
+                            {
+                                value = Enum.ToObject(convertTo, dataDB);
+                            }
+                            else
+                            {
+                                value = Convert.ChangeType(dataDB, convertTo);
+                            }
+                            property.SetValue(item, value, null);
                         }
-                        else
-                        {
-                            value = Convert.ChangeType(dataDB, convertTo);
-                        }
-                        property.SetValue(item, value, null);
                     }
+                    result.Add(item);
                 }
-                result.Add(item);
-            }
 
-            return result;
+                return result;
+            }
         }
 
         public IEnumerable<T> GetDataRawSql<T>(string sql, IDictionary<string, object> parameters = null) where T : class
         {
-            sqlCommand.CommandType = CommandType.Text;
-            sqlCommand.CommandText = sql;
+            _sqlCommand.CommandType = CommandType.Text;
+            _sqlCommand.CommandText = sql;
 
-            foreach (var param in parameters)
-            {
-                sqlCommand.Parameters.Add(new SqlParameter($"@{param.Key}", param.Value));
-            }
+            SetParameters(_sqlCommand.Parameters, parameters);
 
-            using var sqlDataReader = sqlCommand.ExecuteReader();
+            using var sqlDataReader = _sqlCommand.ExecuteReader();
 
             var result = new List<T>();
             while (sqlDataReader.Read())
@@ -115,30 +115,61 @@ namespace BaoHongAcademy.Infrastructure.DataLayer
             foreach (var property in typeof(T).GetProperties())
             {
                 var value = property.GetValue(entity, BindingFlags.Public | BindingFlags.Instance, null, null, CultureInfo.InvariantCulture);
-                sqlParameters.Add(new SqlParameter($"@in_{property.Name}", value ?? DBNull.Value));
+                sqlParameters.Add(new SqlParameter(ToParameter(property.Name), value ?? DBNull.Value));
             }
-        }
-
-        public int InsertIntoDB<T>(string storeName, T entity) where T : BaseEntity
-        {
-            sqlCommand.CommandType = CommandType.StoredProcedure;
-            sqlCommand.CommandText = storeName;
-
-            var sqlParameters = new List<SqlParameter>();
-            MapEntityAndParameter<T>(sqlParameters, entity);
-            sqlCommand.Parameters.AddRange(sqlParameters.ToArray());
-
-            var result = sqlCommand.ExecuteNonQuery();
-            return result;
         }
 
         public void Dispose()
         {
-            if (sqlConnection.State == ConnectionState.Open)
+            if (_sqlConnection.State == ConnectionState.Open)
             {
-                sqlConnection.Close();
+                _sqlConnection.Close();
             }
-            sqlConnection.Dispose();
+            _sqlConnection.Dispose();
+        }
+
+        public int ExcuteCommand(string commandText, bool isSqlRaw = false, IDictionary<string, object> parameters = null)
+        {
+            try
+            {
+                using (var command = new SqlCommand())
+                {
+                    command.Connection = _sqlConnection;
+                    if (this.sqlTransaction != null)
+                    {
+                        command.Transaction = this.sqlTransaction;
+                    }
+                    command.CommandType = isSqlRaw ? CommandType.Text : CommandType.StoredProcedure;
+                    command.CommandText = commandText;
+
+                    SetParameters(command.Parameters, parameters);
+
+                    return command.ExecuteNonQuery();
+                }
+            }
+            catch (SqlException e)
+            {
+                RollBack();
+                return 0;
+            }
+        }
+
+        public async Task<int> ExcuteCommandAync(string commandText, bool isSqlRaw = false, IDictionary<string, object> parameters = null)
+        {
+            using (var command = new SqlCommand())
+            {
+                command.Connection = _sqlConnection;
+                if (this.sqlTransaction != null)
+                {
+                    command.Transaction = this.sqlTransaction;
+                }
+                command.CommandType = isSqlRaw ? CommandType.Text : CommandType.StoredProcedure;
+                command.CommandText = commandText;
+
+                SetParameters(command.Parameters, parameters);
+
+                return await command.ExecuteNonQueryAsync();
+            }
         }
 
         public void Open()
@@ -153,7 +184,41 @@ namespace BaoHongAcademy.Infrastructure.DataLayer
 
         public void BeginTransaction()
         {
-            throw new NotImplementedException();
+            this.sqlTransaction = _sqlConnection.BeginTransaction();
         }
+
+        public void Commit()
+        {
+            if (this.sqlTransaction != null)
+            {
+                this.sqlTransaction.Commit();
+            }
+        }
+
+        public void RollBack()
+        {
+            if (this.sqlTransaction != null)
+            {
+                this.sqlTransaction.Rollback();
+            }
+        }
+
+        #region PRIVATE METHODS
+        private string ToParameter(string name)
+        {
+            return $"@in_{name ?? ""}";
+        }
+
+        private void SetParameters(SqlParameterCollection sqlParameter , IDictionary<string, object> parameters = null)
+        {
+            if (parameters != null)
+            {
+                foreach (var param in parameters)
+                {
+                    sqlParameter.Add(new SqlParameter(ToParameter(param.Key), param.Value));
+                }
+            }
+        }
+        #endregion
     }
 }

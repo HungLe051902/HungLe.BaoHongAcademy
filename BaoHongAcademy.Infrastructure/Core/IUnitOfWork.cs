@@ -10,6 +10,7 @@ namespace BaoHongAcademy.Infrastructure.Core
     public interface IUnitOfWork : IDisposable
     {
         IBlogRepository Blogs { get; }
+        ICourseRepository Courses { get; }
 
         int Complete(); 
     }
