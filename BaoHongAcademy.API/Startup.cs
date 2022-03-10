@@ -19,6 +19,7 @@ using Microsoft.EntityFrameworkCore;
 using BaoHongAcademy.API.Helpers;
 using BaoHongAcademy.API.Middleware;
 using BaoHongAcademy.Infrastructure.Helpers;
+using BaoHongAcademy.API.Helpers.OptionConfigurations;
 
 namespace BaoHongAcademy.API
 {
@@ -67,6 +68,8 @@ namespace BaoHongAcademy.API
 
             // configure strongly typed settings object
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
+
+            services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
 
             services.AddSwaggerGen(c =>
             {
