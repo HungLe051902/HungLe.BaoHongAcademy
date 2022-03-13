@@ -20,6 +20,7 @@ using BaoHongAcademy.API.Helpers;
 using BaoHongAcademy.API.Middleware;
 using BaoHongAcademy.Infrastructure.Helpers;
 using BaoHongAcademy.API.Helpers.OptionConfigurations;
+using Microsoft.AspNetCore.Routing;
 
 namespace BaoHongAcademy.API
 {
@@ -46,6 +47,10 @@ namespace BaoHongAcademy.API
                             .AllowAnyHeader()
                             .AllowAnyMethod();
                     });
+            });
+
+            services.Configure<RouteOptions>(options => {
+                options.LowercaseUrls = true;
             });
 
             services.AddAuthentication().AddGoogle(options =>
