@@ -29,16 +29,27 @@
         />
         <span class="text-danger">{{ passwordError }}</span>
       </div>
-      <button v-on:click="login" class="mt-2 h-btn h-btn-primary w-100 button-load">
-        <span v-if="isLoadingBtn == 1"><i class="fa fa-spinner fa-spin mr-2"></i></span>
+      <button
+        v-on:click="login"
+        class="mt-2 h-btn h-btn-primary w-100 button-load"
+      >
+        <span v-if="isLoadingBtn == 1"
+          ><i class="fa fa-spinner fa-spin mr-2"></i
+        ></span>
         Đăng nhập
       </button>
       <div class="d-flex">
-        <button v-on:click="loginByGoogle" class="h-btn h-btn-primary mt-3 w-50">
+        <button
+          v-on:click="loginByGoogle"
+          class="h-btn h-btn-primary mt-3 w-50"
+        >
           <i class="fa-brands fa-google mr-1"></i>
           Tiếp tục với Google
         </button>
-        <button v-on:click="loginByFacebook" class="ml-2 h-btn h-btn-primary mt-3 w-50">
+        <button
+          v-on:click="loginByFacebook"
+          class="ml-2 h-btn h-btn-primary mt-3 w-50"
+        >
           <span class="mr-1"><i class="fa-brands fa-facebook-square"></i></span>
           Tiếp tục với Facebook
         </button>
@@ -46,9 +57,9 @@
       <div class="mt-3 center-content flex-column">
         <p class="mb-2">
           Bạn chưa có tài khoản?
-          <a v-on:click="goToRegister" href="#">Đăng ký</a>
+          <a class="text-primary" v-on:click="goToRegister" href="#">Đăng ký</a>
         </p>
-        <a href="">Quên mật khẩu?</a>
+        <a class="text-primarysidebar__tab-item" href="">Quên mật khẩu?</a>
       </div>
       <!-- </Form> -->
     </div>
@@ -84,7 +95,8 @@ export default {
     });
     // No need to define rules for fields
     const { value: email, errorMessage: emailError } = useField("email");
-    const { value: password, errorMessage: passwordError } = useField("password");
+    const { value: password, errorMessage: passwordError } =
+      useField("password");
 
     return {
       metaValidation: meta,

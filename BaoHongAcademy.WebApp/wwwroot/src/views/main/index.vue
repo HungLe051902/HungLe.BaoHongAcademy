@@ -3,7 +3,9 @@
     <SideBar />
     <div class="main-content">
       <Header />
-      <router-view />
+      <div class="px-5 right-main-content">
+        <router-view />
+      </div>
     </div>
   </div>
 </template>
@@ -42,6 +44,11 @@ export default {
     top: 0;
     bottom: 0;
     position: absolute;
+    .right-main-content {
+      width: 100%;
+      height: calc(100% - 60px);
+      overflow: auto;
+    }
   }
 }
 </style>

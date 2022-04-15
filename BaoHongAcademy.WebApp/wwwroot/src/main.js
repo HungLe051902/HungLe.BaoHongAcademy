@@ -25,7 +25,7 @@ import "@ionic/vue/css/display.css";
 import "@/assets/scss/main.scss";
 
 /* Import tailwindcss */
-import "./index.css";
+// import "./index.css";
 
 /* Vue-toastification */
 import Notifications from "@kyvg/vue3-notification";

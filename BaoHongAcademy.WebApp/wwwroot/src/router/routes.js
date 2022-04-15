@@ -5,6 +5,7 @@ import Register from "@/views/account/Register";
 import Login from "@/views/account/Login";
 import Guideline from "@/views/Guideline";
 import NotAuthorize from "@/views/NotAuthorize";
+import OnlineCourses from "@/views/main/onlinecourses/index.vue";
 
 export const routes = [
   {
@@ -22,6 +23,11 @@ export const routes = [
         path: "about",
         name: "About",
         component: About,
+      },
+      {
+        path: "online-courses",
+        name: "OnlineCourses",
+        component: OnlineCourses,
       },
     ],
   },
