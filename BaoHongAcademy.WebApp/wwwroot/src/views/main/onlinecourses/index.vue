@@ -8,7 +8,7 @@
 
     <div class="row d-flex justify-between">
       <div v-for="(course, index) in listCourse" :key="index">
-        <div class="online-course-wrapper col-sm-12 col-md-6 col-lg-4 col-xl-3">
+        <div class="online-course-wrapper">
           <Course :courseContent="course" />
         </div>
       </div>
@@ -37,6 +37,7 @@ export default {
 #baohong-online-courses {
   .online-course-wrapper {
     margin-bottom: 16px;
+    margin-left: 15px;
   }
 }
 </style> lang="scss">
