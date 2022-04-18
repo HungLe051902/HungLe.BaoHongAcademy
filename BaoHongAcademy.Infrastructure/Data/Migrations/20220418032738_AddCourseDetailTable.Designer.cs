@@ -4,14 +4,16 @@ using BaoHongAcademy.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BaoHongAcademy.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(BaoHongContext))]
-    partial class BaoHongContextModelSnapshot : ModelSnapshot
+    [Migration("20220418032738_AddCourseDetailTable")]
+    partial class AddCourseDetailTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

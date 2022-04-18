@@ -131,6 +131,8 @@ export default {
       color: $color-white;
       border-bottom: $border-base;
       padding: 20px 0;
+      background-color: #242830;
+      height: 100px;
     }
     .sidebar__content-action {
       padding: 0 20px;
