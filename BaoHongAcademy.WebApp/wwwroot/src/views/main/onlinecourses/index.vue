@@ -16,22 +16,23 @@
       >
         <el-form
           label-width="100px"
-          :model="formLabelAlign"
+          :model="courseData"
           style="max-width: 460px"
+          label-position="left"
         >
-          <el-form-item label="Name">
-            <el-input v-model="formLabelAlign.name" />
+          <el-form-item label="Tiêu đề">
+            <el-input v-model="courseData.title" />
           </el-form-item>
-          <el-form-item label="Activity zone">
-            <el-input v-model="formLabelAlign.region" />
+          <el-form-item label="Mô tả">
+            <el-input v-model="courseData.description" />
           </el-form-item>
-          <el-form-item label="Activity form">
-            <el-input v-model="formLabelAlign.type" />
+          <el-form-item label="Tác giả">
+            <el-input v-model="courseData.author" />
           </el-form-item>
         </el-form>
         <template v-slot:dialog-footer>
           <el-button @click="closeDialog">Hủy</el-button>
-          <el-button type="primary">Xác nhận</el-button>
+          <el-button @click="handleCreateCourse" type="primary">Xác nhận</el-button>
         </template>
       </HDialog>
 
@@ -49,6 +50,7 @@
 <script >
 import Course from "@/components/Course";
 import HDialog from "@/components/HDialog";
+import ServiceCourse from "@/services/courseService.js"
 import { reactive } from "vue";
 
 export default {
@@ -57,12 +59,12 @@ export default {
     HDialog,
   },
   setup() {
-    const formLabelAlign = reactive({
-      name: "",
-      region: "",
-      type: "",
+    const courseData = reactive({
+      title: "",
+      description: "",
+      author: "",
     });
-    return { formLabelAlign };
+    return { courseData };
   },
   data() {
     return {
@@ -82,6 +84,10 @@ export default {
     closeDialog() {
       this.isOpenDialog = false;
     },
+    handleCreateCourse() {
+      ServiceCourse.createCourse({ CourseName: this.courseData.title, CourseDescription: this.courseData.description, Author: this.courseData.author })
+      // console.log(this.courseData, this.courseData.name);
+    }
   },
 };
 </script>

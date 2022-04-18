@@ -8,7 +8,7 @@ namespace BaoHongAcademy.Domain.Entities
 {
     public class Course : BaseEntity
     {
-        public Guid CourseId { get; set; }
+        public Guid CourseId { get; set; } = Guid.NewGuid();
         public string CourseName { get; set; }
         public string CourseDescription { get; set; }
         public string Author { get; set; }
