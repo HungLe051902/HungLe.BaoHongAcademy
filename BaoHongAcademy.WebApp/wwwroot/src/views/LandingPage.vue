@@ -5,7 +5,7 @@
       class="d-flex justify-content-between align-items-center"
     >
       <div class="menu" id="landingpage-header-left">
-        <div class="menu-item">Giới thiệu mới</div>
+        <div class="menu-item">Giới thiệu</div>
         <div class="menu-item">Khóa học</div>
         <div class="menu-item">Hỏi đáp</div>
         <div class="menu-item">Bài viết</div>
