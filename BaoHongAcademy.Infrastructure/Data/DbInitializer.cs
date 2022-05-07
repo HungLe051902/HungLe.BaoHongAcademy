@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using BaoHongAcademy.Domain.Entities;
 using BaoHongAcademy.Domain.Enums;
+using BaoHongAcademy.Infrastructure.Persistence;
+using static BaoHongAcademy.Domain.Enums.EnumCommon;
 
 namespace BaoHongAcademy.Infrastructure.Data
 {
@@ -12,47 +14,42 @@ namespace BaoHongAcademy.Infrastructure.Data
     {
         public static void Initialize(BaoHongContext context)
         {
-            if (context.Users.Any())
+            //if (context.Users.Any())
+            //{
+            //    return;
+            //}
+
+            // Data initilize here
+
+            if (!context.Blogs.Any())
             {
-                return;
+                var blogs = new List<Blog>()
+                {
+                    new Blog {Author = "Hung", BlogType = BlogType.Personal, BlogContent = "This is my blog"},
+                    new Blog {Author = "Anh", BlogType = BlogType.Personal, BlogContent = "This is Anh's blog"},
+                };
+
+                using (var unitOfWork = new UnitOfWork(context))
+                {
+                    unitOfWork.Blogs.AddRange(blogs);
+                    unitOfWork.Complete();
+                }
             }
 
-            var users = new User[]
+            if (!context.Courses.Any())
             {
-                new User()
+                var courses = new List<Course>()
                 {
-                    UserId = Guid.NewGuid(), CreatedBy = "HungLX", UserName = "Lê Xuân Hưng",
-                    Email = "lexuanhung@gmail.com", Fullname = "Lê Xuân Hưng", Password = "123456@Abc",
-                    DateOfBirth = DateTime.Now, Gender = EnumCommon.Gender.Male
-                },
-                new User()
-                {
-                    UserId = Guid.NewGuid(), CreatedBy = "HungLX1", UserName = "Lê Xuân Nam",
-                    Email = "lexuannam@gmail.com", Fullname = "Lê Xuân Nam", Password = "123456@Abc",
-                    DateOfBirth = DateTime.Now, Gender = EnumCommon.Gender.Male
-                },
-                new User()
-                {
-                    UserId = Guid.NewGuid(), CreatedBy = "HungLX2", UserName = "Nguyễn Vân Anh",
-                    Email = "nguyenva@gmail.com", Fullname = "Nguyễn Vân Anh", Password = "12345689@Abc",
-                    DateOfBirth = DateTime.Now, Gender = EnumCommon.Gender.Female
-                },
-                new User()
-                {
-                    UserId = Guid.NewGuid(), CreatedBy = "HungLX", UserName = "Đặng Thanh Hải",
-                    Email = "dangth@gmail.com", Fullname = "Đặng Thanh Hải", Password = "123456@Abc",
-                    DateOfBirth = DateTime.Now, Gender = EnumCommon.Gender.Male
-                },
-                new User()
-                {
-                    UserId = Guid.NewGuid(), CreatedBy = "HungLX", UserName = "Bùi Thị Phóng",
-                    Email = "phongbt@gmail.com", Fullname = "Bùi Thị Phóng", Password = "12123456@Abc",
-                    DateOfBirth = DateTime.Now, Gender = EnumCommon.Gender.Female
-                },
-            };
+                    new Course {Author = "Hung", CourseName = "Lập trình C# từ A - Z"},
+                    new Course {Author = "Anh", CourseName = "Làm chủ Javascript"},
+                };
 
-            context.Users.AddRange(users);
-            context.SaveChanges();
+                using (var unitOfWork = new UnitOfWork(context))
+                {
+                    unitOfWork.Courses.AddRange(courses);
+                    unitOfWork.Complete();
+                }
+            }
         }
     }
 }

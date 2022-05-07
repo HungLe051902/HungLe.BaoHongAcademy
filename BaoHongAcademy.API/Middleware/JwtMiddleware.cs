@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BaoHongAcademy.API.Helpers;
+﻿using BaoHongAcademy.API.Helpers;
+using BaoHongAcademy.API.Helpers.Constants;
 using BaoHongAcademy.API.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace BaoHongAcademy.API.Middleware
 {
@@ -50,7 +50,7 @@ namespace BaoHongAcademy.API.Middleware
                 }, out SecurityToken validatedToken);
 
                 var jwtToken = (JwtSecurityToken)validatedToken;
-                var userId = Guid.Parse(jwtToken.Claims.First(x => x.Type == "id").Value);
+                var userId = Guid.Parse(jwtToken.Claims.First(x => x.Type == ClaimType.USER_ID).Value);
 
                 // attach user to context on successful jwt validation
                 context.Items["User"] = userService.GetById(userId);

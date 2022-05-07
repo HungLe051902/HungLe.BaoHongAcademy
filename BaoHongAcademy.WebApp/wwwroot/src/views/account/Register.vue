@@ -19,6 +19,7 @@
       <div class="form-group">
         <label for="exampleInputPassword1">Password</label>
         <input
+          @keyup.enter="registerUser"
           type="password"
           class="form-control"
           id="exampleInputPassword1"
@@ -56,7 +57,7 @@
   </div>
 </template>
 <script>
-import Brand from "@/components/Brand";
+import Brand from "@/components/HBrand.vue";
 import AccountMixin from "@/mixins/accountMixin.vue";
 import { HTTP } from "@/services/BaseAxios";
 import { useField, useForm } from "vee-validate";

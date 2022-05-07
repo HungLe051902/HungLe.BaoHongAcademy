@@ -18,6 +18,9 @@ using BaoHongAcademy.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using BaoHongAcademy.API.Helpers;
 using BaoHongAcademy.API.Middleware;
+using BaoHongAcademy.Infrastructure.Helpers;
+using BaoHongAcademy.API.Helpers.OptionConfigurations;
+using Microsoft.AspNetCore.Routing;
 
 namespace BaoHongAcademy.API
 {
@@ -46,8 +49,20 @@ namespace BaoHongAcademy.API
                     });
             });
 
+            services.Configure<RouteOptions>(options => {
+                options.LowercaseUrls = true;
+            });
+
+            services.AddAuthentication().AddGoogle(options =>
+            {
+                options.ClientId = Configuration.GetSection("Authentication:Google:ClientId").ToString();
+                options.ClientSecret = Configuration.GetSection("Authentication:Google:ClientSecret").ToString();
+            });
+
             services.AddDbContext<BaoHongContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            DatabaseHelper.connectionString = Configuration.GetConnectionString("DefaultConnection");
 
             services.AddScoped<IUserService, UserService>();
 
@@ -58,6 +73,8 @@ namespace BaoHongAcademy.API
 
             // configure strongly typed settings object
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
+
+            services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
 
             services.AddSwaggerGen(c =>
             {
@@ -93,6 +110,9 @@ namespace BaoHongAcademy.API
             app.UseCors(MyAllowSpecificOrigins);
 
             app.UseAuthentication();
+
+            // Global error handler
+            app.UseHandleErrorMiddleware();
 
             app.UseMiddleware<JwtMiddleware>();
 

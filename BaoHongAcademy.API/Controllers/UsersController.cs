@@ -1,16 +1,12 @@
-﻿using BaoHongAcademy.Domain.Models;
+﻿using BaoHongAcademy.API.Interfaces;
+using BaoHongAcademy.Domain.Models;
 using BaoHongAcademy.Domain.Models.Account;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using System.Threading.Tasks;
-using BaoHongAcademy.API.Interfaces;
 using static BaoHongAcademy.Domain.Enums.EnumCommon;
-using BaoHongAcademy.API.Helpers.Authorization;
-using Microsoft.AspNetCore.Authorization;
 
 namespace BaoHongAcademy.API.Controllers
 {
@@ -42,6 +38,14 @@ namespace BaoHongAcademy.API.Controllers
         public async Task<ActionServiceResult> Register([NotNull] UserCred userCred)
         {
             var result = await _userService.RegisterUser(userCred.UserName, userCred.Password);
+            return result;
+        }
+
+        [AllowAnonymous]
+        [HttpPost("external-login")]
+        public async Task<ActionServiceResult> ExternalLogin([NotNull] UserExternal userCred)
+        {
+            var result = await _userService.RegisterExternalUser(userCred.Gmail);
             return result;
         }
     }

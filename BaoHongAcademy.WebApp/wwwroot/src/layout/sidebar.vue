@@ -4,17 +4,27 @@
     <div id="sidebar__content">
       <div v-if="isLogin" class="sidebar__user-info">{{ user.userName }}</div>
       <div v-else class="sidebar__content-action">
-        <button v-on:click="goToRegister" class="w-100 h-btn h-btn-primary mt-3">
-          <img class="icon mr-1" src="@/assets/svg/person-add-outline.svg" alt="" />
+        <button
+          v-on:click="goToRegister"
+          class="w-100 h-btn h-btn-primary mt-3"
+        >
+          <img
+            class="icon mr-1"
+            src="@/assets/svg/person-add-outline.svg"
+            alt=""
+          />
           Đăng ký
         </button>
-        <button v-on:click="goToLogin" class="w-100 h-btn h-btn-secondary mt-2 mb-3">
+        <button
+          v-on:click="goToLogin"
+          class="w-100 h-btn h-btn-secondary mt-2 mb-3"
+        >
           <img class="icon mr-1" src="@/assets/svg/log-in-outline.svg" alt="" />
           Đăng nhập
         </button>
       </div>
       <div class="sidebar__tab mt-4">
-        <div class="sidebar__tab-item">
+        <div v-on:click="goToCourseView" class="sidebar__tab-item">
           <img class="icon" src="@/assets/svg/book-outline.svg" alt="" />
           KHÓA HỌC
         </div>
@@ -35,7 +45,11 @@
           TAG
         </div>
         <div class="sidebar__tab-item">
-          <img class="icon" src="@/assets/svg/accessibility-outline.svg" alt="" />
+          <img
+            class="icon"
+            src="@/assets/svg/accessibility-outline.svg"
+            alt=""
+          />
           ABOUT BAOHONG
         </div>
         <div class="sidebar__tab-item">
@@ -72,6 +86,13 @@ export default {
     }
   },
   methods: {
+    goToCourseView() {
+      try {
+        this.$router.push({ name: "OnlineCourses" });
+      } catch (error) {
+        console.log(error);
+      }
+    },
     parseJwt(token) {
       var base64Url = token.split(".")[1];
       var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
@@ -110,6 +131,8 @@ export default {
       color: $color-white;
       border-bottom: $border-base;
       padding: 20px 0;
+      background-color: #242830;
+      height: 100px;
     }
     .sidebar__content-action {
       padding: 0 20px;
@@ -122,6 +145,7 @@ export default {
         font-weight: 500;
         padding: 8px 20px;
         cursor: pointer;
+        display: flex;
         color: #c0c0c0;
         img {
           margin-right: 8px;
